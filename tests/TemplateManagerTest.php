@@ -13,6 +13,7 @@ class TemplateManagerTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        // I didn't bother mocking those dependencies as they are fake
         $this->appContext = new \Deadbeef\Context\ApplicationContext();
         $this->quoteRepo = new \Deadbeef\Repository\QuoteRepository();
         $this->siteRepo = new \Deadbeef\Repository\SiteRepository();
@@ -36,14 +37,13 @@ class TemplateManagerTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function test()
+    public function testVarsAreRenderedCorrectly()
     {
         $faker = \Faker\Factory::create();
 
         $expectedDestination = $this->destinationRepo->getById($faker->randomNumber());
         $expectedUser = $this->appContext->getCurrentUser();
-
-        $quote = new \Deadbeef\Entity\Quote($faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $faker->date());
+        $quote = $this->createFakeQuote();
 
         $template = new \Deadbeef\Entity\Template(
             1,
@@ -59,23 +59,49 @@ L'équipe Evaneos.com
 www.evaneos.com
 ");
 
-        $message = $this->templateManager->getTemplateComputed(
-            $template,
-            [
-                'quote' => $quote
-            ]
+        $message = $this->templateManager->getTemplateComputed($template, ['quote' => $quote]);
+
+        $this->assertEquals(
+            'Votre voyage avec une agence locale '.$expectedDestination->countryName,
+            $message->subject
         );
-
-        $this->assertEquals('Votre voyage avec une agence locale ' . $expectedDestination->countryName, $message->subject);
         $this->assertEquals("
-Bonjour " . $expectedUser->firstname . ",
+Bonjour ".$expectedUser->firstname.",
 
-Merci d'avoir contacté un agent local pour votre voyage " . $expectedDestination->countryName . ".
+Merci d'avoir contacté un agent local pour votre voyage ".$expectedDestination->countryName.".
 
 Bien cordialement,
 
 L'équipe Evaneos.com
 www.evaneos.com
 ", $message->content);
+    }
+
+    /**
+     * @expectedException \Deadbeef\MissingContextVarException
+     */
+    public function testThrowsOnUnrenderedVar()
+    {
+        $quote = $this->createFakeQuote();
+        // this template needs a quote to be properly rendered
+        $template = new \Deadbeef\Entity\Template(
+            1,
+            'Votre voyage avec une agence locale [quote:bar]',
+            '[quote:foo]'
+        );
+
+        $this->templateManager->getTemplateComputed($template, []);
+    }
+
+    private function createFakeQuote()
+    {
+        $faker = \Faker\Factory::create();
+
+        return new \Deadbeef\Entity\Quote(
+            $faker->randomNumber(),
+            $faker->randomNumber(),
+            $faker->randomNumber(),
+            $faker->date()
+        );
     }
 }
