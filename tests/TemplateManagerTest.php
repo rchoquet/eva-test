@@ -5,7 +5,6 @@ require_once __DIR__ . '/../src/Entity/Quote.php';
 require_once __DIR__ . '/../src/Entity/Site.php';
 require_once __DIR__ . '/../src/Entity/Template.php';
 require_once __DIR__ . '/../src/Entity/User.php';
-require_once __DIR__ . '/../src/Helper/SingletonTrait.php';
 require_once __DIR__ . '/../src/Context/ApplicationContext.php';
 require_once __DIR__ . '/../src/Repository/Repository.php';
 require_once __DIR__ . '/../src/Repository/DestinationRepository.php';
@@ -15,11 +14,28 @@ require_once __DIR__ . '/../src/TemplateManager.php';
 
 class TemplateManagerTest extends PHPUnit_Framework_TestCase
 {
+    private $appContext;
+    private $quoteRepo;
+    private $siteRepo;
+    private $destinationRepo;
+    private $templateManager;
+
     /**
      * Init the mocks
      */
     public function setUp()
     {
+        $this->appContext = new ApplicationContext();
+        $this->quoteRepo = new QuoteRepository();
+        $this->siteRepo = new SiteRepository();
+        $this->destinationRepo = new DestinationRepository();
+
+        $this->templateManager = new TemplateManager(
+            $this->appContext,
+            $this->quoteRepo,
+            $this->siteRepo,
+            $this->destinationRepo
+        );
     }
 
     /**
@@ -36,8 +52,8 @@ class TemplateManagerTest extends PHPUnit_Framework_TestCase
     {
         $faker = \Faker\Factory::create();
 
-        $expectedDestination = DestinationRepository::getInstance()->getById($faker->randomNumber());
-        $expectedUser = ApplicationContext::getInstance()->getCurrentUser();
+        $expectedDestination = $this->destinationRepo->getById($faker->randomNumber());
+        $expectedUser = $this->appContext->getCurrentUser();
 
         $quote = new Quote($faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $faker->date());
 
@@ -54,9 +70,8 @@ Bien cordialement,
 L'équipe Evaneos.com
 www.evaneos.com
 ");
-        $templateManager = new TemplateManager();
 
-        $message = $templateManager->getTemplateComputed(
+        $message = $this->templateManager->getTemplateComputed(
             $template,
             [
                 'quote' => $quote

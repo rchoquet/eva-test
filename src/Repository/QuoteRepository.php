@@ -2,8 +2,6 @@
 
 class QuoteRepository implements Repository
 {
-    use SingletonTrait;
-
     private $siteId;
     private $destinationId;
     private $date;
