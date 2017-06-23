@@ -1,5 +1,14 @@
 <?php
 
+namespace Deadbeef;
+
+use Deadbeef\Context\ApplicationContext;
+use Deadbeef\Entity\Quote;
+use Deadbeef\Entity\Template;
+use Deadbeef\Repository\DestinationRepository;
+use Deadbeef\Repository\QuoteRepository;
+use Deadbeef\Repository\SiteRepository;
+
 class TemplateManager
 {
     private $appContext;

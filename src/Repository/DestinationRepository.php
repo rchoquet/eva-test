@@ -1,5 +1,9 @@
 <?php
 
+namespace Deadbeef\Repository;
+
+use Deadbeef\Entity\Destination;
+
 class DestinationRepository implements Repository
 {
     private $country;
@@ -11,9 +15,9 @@ class DestinationRepository implements Repository
      */
     public function __construct()
     {
-        $this->country = Faker\Factory::create()->country;
+        $this->country = \Faker\Factory::create()->country;
         $this->conjunction = 'en';
-        $this->computerName = Faker\Factory::create()->slug();
+        $this->computerName = \Faker\Factory::create()->slug();
     }
 
     /**

@@ -1,17 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../src/Entity/Destination.php';
-require_once __DIR__ . '/../src/Entity/Quote.php';
-require_once __DIR__ . '/../src/Entity/Site.php';
-require_once __DIR__ . '/../src/Entity/Template.php';
-require_once __DIR__ . '/../src/Entity/User.php';
-require_once __DIR__ . '/../src/Context/ApplicationContext.php';
-require_once __DIR__ . '/../src/Repository/Repository.php';
-require_once __DIR__ . '/../src/Repository/DestinationRepository.php';
-require_once __DIR__ . '/../src/Repository/QuoteRepository.php';
-require_once __DIR__ . '/../src/Repository/SiteRepository.php';
-require_once __DIR__ . '/../src/TemplateManager.php';
-
 class TemplateManagerTest extends PHPUnit_Framework_TestCase
 {
     private $appContext;
@@ -25,12 +13,12 @@ class TemplateManagerTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->appContext = new ApplicationContext();
-        $this->quoteRepo = new QuoteRepository();
-        $this->siteRepo = new SiteRepository();
-        $this->destinationRepo = new DestinationRepository();
+        $this->appContext = new \Deadbeef\Context\ApplicationContext();
+        $this->quoteRepo = new \Deadbeef\Repository\QuoteRepository();
+        $this->siteRepo = new \Deadbeef\Repository\SiteRepository();
+        $this->destinationRepo = new \Deadbeef\Repository\DestinationRepository();
 
-        $this->templateManager = new TemplateManager(
+        $this->templateManager = new \Deadbeef\TemplateManager(
             $this->appContext,
             $this->quoteRepo,
             $this->siteRepo,
@@ -55,9 +43,9 @@ class TemplateManagerTest extends PHPUnit_Framework_TestCase
         $expectedDestination = $this->destinationRepo->getById($faker->randomNumber());
         $expectedUser = $this->appContext->getCurrentUser();
 
-        $quote = new Quote($faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $faker->date());
+        $quote = new \Deadbeef\Entity\Quote($faker->randomNumber(), $faker->randomNumber(), $faker->randomNumber(), $faker->date());
 
-        $template = new Template(
+        $template = new \Deadbeef\Entity\Template(
             1,
             'Votre voyage avec une agence locale [quote:destination_name]',
             "

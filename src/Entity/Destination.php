@@ -1,5 +1,7 @@
 <?php
 
+namespace Deadbeef\Entity;
+
 class Destination
 {
     public $id;

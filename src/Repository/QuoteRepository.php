@@ -1,5 +1,9 @@
 <?php
 
+namespace Deadbeef\Repository;
+
+use Deadbeef\Entity\Quote;
+
 class QuoteRepository implements Repository
 {
     private $siteId;
@@ -12,11 +16,11 @@ class QuoteRepository implements Repository
     public function __construct()
     {
         // DO NOT MODIFY THIS METHOD
-        $generator = Faker\Factory::create();
+        $generator = \Faker\Factory::create();
 
         $this->siteId = $generator->numberBetween(1, 10);
         $this->destinationId = $generator->numberBetween(1, 200);
-        $this->date = new DateTime();
+        $this->date = new \DateTime();
     }
 
     /**

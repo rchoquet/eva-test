@@ -1,5 +1,7 @@
 <?php
 
+namespace Deadbeef\Entity;
+
 class User
 {
     public $id;

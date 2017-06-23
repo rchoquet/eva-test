@@ -1,5 +1,7 @@
 <?php
 
+namespace Deadbeef\Entity;
+
 class Template
 {
     public $id;

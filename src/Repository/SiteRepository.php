@@ -1,5 +1,9 @@
 <?php
 
+namespace Deadbeef\Repository;
+
+use Deadbeef\Entity\Site;
+
 class SiteRepository implements Repository
 {
     private $url;
@@ -11,7 +15,7 @@ class SiteRepository implements Repository
     public function __construct()
     {
         // DO NOT MODIFY THIS METHOD
-        $this->url = Faker\Factory::create()->url;
+        $this->url = \Faker\Factory::create()->url;
     }
 
     /**

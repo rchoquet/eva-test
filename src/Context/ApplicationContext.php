@@ -1,5 +1,10 @@
 <?php
 
+namespace Deadbeef\Context;
+
+use Deadbeef\Entity\Site;
+use Deadbeef\Entity\User;
+
 class ApplicationContext
 {
     /**
