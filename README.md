@@ -1,5 +1,25 @@
 # Refactoring Kata Test
 
+## The refactoring explained
+
+Some of the most notable steps:
+- Removing the singleton anti-pattern across the codebase as it makes global state leaking everywhere
+- Removing the handmade classes loading by using composer PSR-4 autoload
+- Actually refactoring the TemplateManager logic:
+    - Use composition over hidden singleton dependencies
+    - rename some cryptic vars
+    - escape HTML to prevent XSS
+    - add some DocBlocks
+    - throws exception when a quote was not given but we need it to properly render the given template
+    - add a test for this exception
+- ✨ Using emojis in commit message ✨
+
+*Nb: I thought about removing the whole rendering mechanism (just keeping the public function) and replacing this by a
+common template engine (as there is not point in re-inventing the wheel) but I didn't know if this was allowed
+as most of the formatting logic would have been moved to the templates*
+
+*Nb2: I didn't tested the whole thing, as in real world the formatting part wouldn't have been done in the PHP class*
+
 ## Introduction
 
 **Evaneos** is present on a lot of countries and we have some message templates we want to send
